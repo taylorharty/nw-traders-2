@@ -1,15 +1,15 @@
 @model IEnumerable<Discount>
 
-<h2 class="mt-3"><i class="fas fa-list-ul"></i> Product Categories</h2>
+<h2 class="mt-3"><i class="fas fa-list-ul"></i> Discounts</h2>
 <a asp-action="AddDiscount">Add Discount</a>
 <ul class="list-group">
     @foreach (Discount d in Model)
     {
         decimal percentage = d.DiscountPercent * 100;
         decimal discountPrice = d.Product.UnitPrice - (d.Product.UnitPrice * d.DiscountPercent);
-        <li class="list-group-item">@d.Title - @d.Product.ProductName - <i style="opacity:.6;">%@Math.Round(percentage, 2);
-                OFF
-            </i> - <b>$@Math.Round(discountPrice, 2)</b> - Ending @d.EndTime.ToString("MM/dd/yyyy")
+        <li style="@if(d.EndTime < DateTime.Now) { <text>background-color: #f76f65;</text> } else if(d.StartTime > DateTime.Now) { <text>background-color: #f2f765;</text> } else { <text>background-color: #65f76f;</text> }"
+         class="list-group-item">@d.Title - @d.Product.ProductName - <i style="opacity:.6;">@Math.Round(percentage, 2)% OFF
+            </i> - <b>$@Math.Round(discountPrice, 2)</b> | <b>Dates</b> - @d.StartTime.ToString("MM/dd/yyyy") - @d.EndTime.ToString("MM/dd/yyyy")
             <a asp-action="DeleteDiscount" asp-route-id="@d.DiscountId">Remove</a>
             <a asp-action="EditDiscount" asp-route-id="@d.DiscountId">Edit</a>
         </li>
